@@ -22,11 +22,12 @@ func increment() {
     }
     
     count += 1
-    write()	
+    write()
 }
 
 func reset() {
-    
+    count = 0
+    write()
 }
 
 func write() {
