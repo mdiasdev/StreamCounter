@@ -16,21 +16,36 @@ if !fileManager.fileExists(atPath: filePath) {
 
 let args = CommandLine.arguments
 
-if let data = fileManager.contents(atPath: filePath), let fileContents = String(data: data, encoding: .utf8) {
-    count = Int(fileContents) ?? 0
+func increment() {
+    if let data = fileManager.contents(atPath: filePath), let fileContents = String(data: data, encoding: .utf8) {
+        count = Int(fileContents) ?? 0
+    }
+    
+    count += 1
+    write()	
 }
 
-count += 1
-
-var output = "\(count)"
-
-if count < 10 {
-    output = "0\(count)"
+func reset() {
+    
 }
 
-do {
-    try output.write(to: URL(fileURLWithPath: filePath), atomically: false, encoding: String.Encoding.utf8)
-} catch {
-    // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
-    print("something went wrong")
+func write() {
+    var output = "\(count)"
+    
+    if count < 10 {
+        output = "0\(count)"
+    }
+    
+    do {
+        try output.write(to: URL(fileURLWithPath: filePath), atomically: false, encoding: String.Encoding.utf8)
+    } catch {
+        // failed to write file – bad permissions, bad filename, missing permissions, or more likely it can't be converted to the encoding
+        print("something went wrong")
+    }
+}
+
+if args.contains("-r") {
+    reset()
+} else {
+    increment()
 }
